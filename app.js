@@ -2,6 +2,8 @@
 const form = document.getElementById("search-form");
 const input = document.getElementById("search-input");
 const result = document.getElementById("result");
+const teamDiv = document.getElementById("team");
+let team = [];
 
 // Run this when the form is submitted
 form.addEventListener("submit", async (event) => {
@@ -24,6 +26,35 @@ form.addEventListener("submit", async (event) => {
         <img src="${data.sprites.front_default}" alt="${data.name}">
         <p>Type: ${types}</p>
         <ul>${stats}</ul> 
+        <button id="add-btn">Add to team</button>
+
     `;
+
+    document.getElementById("add-btn").addEventListener("click", () => {
+        addToTeam(data);
+    });
+
+    function addToTeam(pokemon) {
+        if (team.length >= 6) {
+            alert("Your team is full! Max 6 Pokémon.");
+            return;
+        }
+
+        team.push({
+            name: pokemon.name,
+            image: pokemon.sprites.front_default
+        });
+
+        renderTeam();
+    }
+
+    function renderTeam() {
+        teamDiv.innerHTML = team.map(p => `
+            <div class="team-member">
+                <img src="${p.image}" alt="${p.name}">
+                <p>${p.name}</p>
+            </div>
+            `).join("");
+    }
 
 });
