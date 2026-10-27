@@ -11,6 +11,10 @@ form.addEventListener("submit", async (event) => {
 
     // Ask PokeAPI for that Pokemon, then wait for the answer
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    if (!response.ok) {
+        result.innerHTML = `<p> No Pokémon found. Check the spelling and try again.</p>`;
+    }
+
     const data = await response.json(); // turn the answer into a JavaScript object
     const types = data.types.map(t => t.type.name).join(", ");
     const stats = data.stats.map(s => `<li>${s.stat.name}: ${s.base_stat}</li>`).join("");
