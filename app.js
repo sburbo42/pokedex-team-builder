@@ -13,11 +13,13 @@ form.addEventListener("submit", async (event) => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await response.json(); // turn the answer into a JavaScript object
     const types = data.types.map(t => t.type.name).join(", ");
+    const stats = data.stats.map(s => `<li>${s.stat.name}: ${s.base_stat}</li>`).join("");
 
     result.innerHTML = `
         <h2>${data.name}</h2>
         <img src="${data.sprites.front_default}" alt="${data.name}">
         <p>Type: ${types}</p>
+        <ul>${stats}</ul> 
     `;
 
 });
