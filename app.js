@@ -3,7 +3,7 @@ const form = document.getElementById("search-form");
 const input = document.getElementById("search-input");
 const result = document.getElementById("result");
 const teamDiv = document.getElementById("team");
-let team = [];
+let team = JSON.parse(localStorage.getItem("team")) || [];
 
 // Run this when the form is submitted
 form.addEventListener("submit", async (event) => {
@@ -15,6 +15,7 @@ form.addEventListener("submit", async (event) => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     if (!response.ok) {
         result.innerHTML = `<p> No Pokémon found. Check the spelling and try again.</p>`;
+        return;
     }
 
     const data = await response.json(); // turn the answer into a JavaScript object
@@ -34,27 +35,31 @@ form.addEventListener("submit", async (event) => {
         addToTeam(data);
     });
 
-    function addToTeam(pokemon) {
-        if (team.length >= 6) {
-            alert("Your team is full! Max 6 Pokémon.");
-            return;
-        }
-
-        team.push({
-            name: pokemon.name,
-            image: pokemon.sprites.front_default
-        });
-
-        renderTeam();
-    }
-
-    function renderTeam() {
-        teamDiv.innerHTML = team.map(p => `
-            <div class="team-member">
-                <img src="${p.image}" alt="${p.name}">
-                <p>${p.name}</p>
-            </div>
-            `).join("");
-    }
-
 });
+
+function addToTeam(pokemon) {
+    if (team.length >= 6) {
+        alert("Your team is full! Max 6 Pokémon.");
+        return;
+    }
+
+    team.push({
+        name: pokemon.name,
+        image: pokemon.sprites.front_default
+    });
+
+    renderTeam();
+
+    localStorage.setItem("team", JSON.stringify(team));
+}
+
+function renderTeam() {
+    teamDiv.innerHTML = team.map(p => `
+        <div class="team-member">
+            <img src="${p.image}" alt="${p.name}">
+            <p>${p.name}</p>
+        </div>
+        `).join("");
+}
+
+renderTeam();
