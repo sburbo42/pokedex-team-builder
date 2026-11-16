@@ -20,7 +20,7 @@ form.addEventListener("submit", async (event) => {
 
     const data = await response.json(); // turn the answer into a JavaScript object
     const types = data.types.map(t => t.type.name).join(", ");
-    const stats = data.stats.map(s => `<li>${s.stat.name}: ${s.base_stat}</li>`).join("");
+    const stats = data.stats.map(s => `<li>${s.stat.name.replace("-", " ").replace("hp", "HP")}: ${s.base_stat}</li>`).join("");
 
     result.innerHTML = `
         <h2>${data.name}</h2>
